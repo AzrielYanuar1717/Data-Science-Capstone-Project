@@ -64,6 +64,8 @@ if submitted:
         input_df[col] = label_encoders[col].transform(input_df[col])
     input_df[num_cols] = scaler.transform(input_df[num_cols])
 
+    input_df = input_df[model.feature_names_in_]
+
     pred = model.predict(input_df)
     pred_label = le_target.inverse_transform(pred)[0]
 
