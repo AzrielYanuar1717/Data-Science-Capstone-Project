@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 
 # Load model dan encoder
-model = joblib.load('model_obesitas.pkl')
-scaler = joblib.load('scaler.pkl')
-label_encoders = joblib.load('label_encoders.pkl')
-le_target = joblib.load('le_target.pkl')
+model = joblib.load('capstone/model_obesitas.pkl')
+scaler = joblib.load('capstone/scaler.pkl')
+label_encoders = joblib.load('capstone/label_encoders.pkl')
+le_target = joblib.load('capstone/le_target.pkl')
 
 input_features = [
     'Gender', 'Age', 'Height', 'Weight', 'family_history_with_overweight',
