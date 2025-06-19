@@ -3,18 +3,30 @@ import joblib
 import numpy as np
 import pandas as pd
 
-# Load model dan encoder
+
 model = joblib.load('capstone/model_obesitas.pkl')
 scaler = joblib.load('capstone/scaler.pkl')
 label_encoders = joblib.load('capstone/label_encoders.pkl')
 le_target = joblib.load('capstone/le_target.pkl')
 
+label_nama = {
+    "Insufficient_Weight": "Kurus",
+    "Normal_Weight": "Normal",
+    "Overweight_Level_I": "Gemuk I",
+    "Overweight_Level_II": "Gemuk II",
+    "Obesity_Type_I": "Obesitas I",
+    "Obesity_Type_II": "Obesitas II",
+    "Obesity_Type_III": "Obesitas III"
+}
+
 input_features = [
     'Gender', 'Age', 'Height', 'Weight', 'family_history_with_overweight',
-    'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS'
+    'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC',
+    'FAF', 'TUE', 'CALC', 'MTRANS'
 ]
 num_cols = ['Age', 'Height', 'Weight', 'FCVC', 'NCP', 'CH2O', 'FAF', 'TUE']
-cat_cols = ['Gender', 'family_history_with_overweight', 'FAVC', 'CAEC', 'SMOKE', 'SCC', 'CALC', 'MTRANS']
+cat_cols = ['Gender', 'family_history_with_overweight', 'FAVC',
+            'CAEC', 'SMOKE', 'SCC', 'CALC', 'MTRANS']
 
 st.set_page_config(page_title="Prediksi Tingkat Obesitas", layout="centered")
 st.title("Prediksi Tingkat Obesitas Berdasarkan Data Individu")
@@ -68,8 +80,11 @@ if submitted:
 
     pred = model.predict(input_df)
     pred_label = le_target.inverse_transform(pred)[0]
+    nama_output = label_nama.get(pred_label, pred_label)    
 
-    st.success(f"**Prediksi Tingkat Obesitas: {pred_label}**")
+    st.success(f"**Prediksi Tingkat Obesitas: {nama_output}**")
     st.write("---")
     st.write("Keterangan kelas prediksi:")
-    st.write(", ".join(le_target.classes_))
+    for key, value in label_nama.items():
+        st.write(f"- {value} ({key})")         
+    st.write("Label asli model:", ", ".join(le_target.classes_))
